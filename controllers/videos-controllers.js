@@ -1,21 +1,38 @@
 const HttpError = require("../models/http-error");
 const Video = require("../models/video");
+const cloudinary = require("cloudinary").v2;
 const { validationResult } = require("express-validator");
 const User = require("../models/user");
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+  secure: true,
+});
 
 const createVideo = async (req, res, next) => {
   const error = validationResult(req);
   if (!error.isEmpty()) {
     return next(new HttpError("Invalid inputs passed ", 422));
   }
-
+  const { file } = req;
   const { user, name, caption } = req.body;
 
   const createdVideo = new Video({
     name,
-    filename: req.file.path,
+    filename: file.path,
     caption,
   });
+
+  cloudinary.uploader.upload(file.path, { resource_type: 'video' }, (error, result) => {
+    if (error) {
+      console.log('Upload error:', error);
+    } else {
+     // console.log('Upload success:', result);
+    }
+  });
+  
 
   let creator;
   try {
@@ -81,10 +98,7 @@ const like = async (req, res, next) => {
   try {
     video = await Video.findById(vid);
   } catch (err) {
-    const error = new HttpError(
-      "Something went wrong",
-      500
-    );
+    const error = new HttpError("Something went wrong", 500);
     return next(error);
   }
 
@@ -96,7 +110,7 @@ const like = async (req, res, next) => {
   if (!video.likes.includes(id)) {
     video.likes.push(existingUser);
   }
-  
+
   await video.save();
   res.status(201).json({ video: video });
 };
@@ -104,4 +118,4 @@ const like = async (req, res, next) => {
 exports.createVideo = createVideo;
 exports.AllVideos = AllVideos;
 // exports.getBlogById = getBlogById;
-exports.like=like;
+exports.like = like;
