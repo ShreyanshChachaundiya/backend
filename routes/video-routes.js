@@ -10,7 +10,7 @@ module.exports = router;
 
 router.post(
   "/add",
-  fileUpload.single("video"),
+  // fileUpload.single("video"),
   [check("name").not().isEmpty(), check("caption").not().isEmpty()],
   videosController.createVideo
 );

@@ -16,22 +16,22 @@ const createVideo = async (req, res, next) => {
   if (!error.isEmpty()) {
     return next(new HttpError("Invalid inputs passed ", 422));
   }
-  const { file } = req;
+  // const { file } = req;
   const { user, name, caption } = req.body;
 
   const createdVideo = new Video({
     name,
-    filename: file.path,
+    filename: "vckjsdghv",
     caption,
   });
 
-  cloudinary.uploader.upload(file.path, { resource_type: 'video' }, (error, result) => {
-    if (error) {
-      console.log('Upload error:', error);
-    } else {
-     // console.log('Upload success:', result);
-    }
-  });
+  // cloudinary.uploader.upload(file.path, { resource_type: 'video' }, (error, result) => {
+  //   if (error) {
+  //     console.log('Upload error:', error);
+  //   } else {
+  //    // console.log('Upload success:', result);
+  //   }
+  // });
   
 
   let creator;
