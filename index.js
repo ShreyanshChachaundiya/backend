@@ -9,6 +9,7 @@ const postsRoutes = require("./routes/post-routes");
 const blogsRoutes = require("./routes/blog-routes");
 const itemsRoutes = require("./routes/item-routes");
 const videosRoutes = require("./routes/video-routes");
+const musicsRoutes = require("./routes/music-routes");
 const reviewsRoutes = require("./routes/review-routes");
 const { dummy } = require("./controllers/users-controllers");
 const cors = require("cors");
@@ -23,6 +24,8 @@ app.use(cors());
 app.options('*', cors());
 
 app.use('/uploads/videos', express.static(path.join('uploads','videos')));
+
+app.use('/uploads/musics', express.static(path.join('uploads','musics')));
 
 
 app.use((req, res, next) => {
@@ -43,6 +46,7 @@ app.use("/api/blogs", blogsRoutes);
 app.use("/api/items", itemsRoutes);
 app.use("/api/reviews", reviewsRoutes);
 app.use("/api/videos", videosRoutes);
+app.use("/api/musics", musicsRoutes);
 
 dotenv.config();
 
