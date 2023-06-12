@@ -3,7 +3,7 @@ const HttpError = require("../models/http-error");
 
 const musicUpload = multer({
   limits: {
-    fileSize: 100 * 1024 * 1024, // 10MB (in bytes)
+    fileSize: 10 * 1024 * 1024, // 10MB (in bytes)
   },
   storage: multer.diskStorage({
     // destination: (req, file, cb) => {
