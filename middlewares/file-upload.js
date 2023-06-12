@@ -4,12 +4,12 @@ const HttpError = require("../models/http-error");
 const fileUpload = multer({
   limit:5000000,
     storage:multer.diskStorage({
-        destination: (req, file, cb) => {
-          cb(null, './uploads/videos'); // Set the destination folder for storing uploaded videos
-        },
-        filename: (req, file, cb) => {
-          cb(null, Date.now() + '-' + file.originalname); // Set the filename to include the current timestamp
-        },
+        // destination: (req, file, cb) => {
+        //   cb(null, './uploads/videos'); // Set the destination folder for storing uploaded videos
+        // },
+        // filename: (req, file, cb) => {
+        //   cb(null, Date.now() + '-' + file.originalname); // Set the filename to include the current timestamp
+        // },
       }),
     fileFilter: (req, file, cb) => {
         // Check the file mimetype
