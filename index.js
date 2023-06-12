@@ -21,12 +21,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
-app.options('*', cors());
-
-app.use('/uploads/videos', express.static(path.join('uploads','videos')));
-
-app.use('/uploads/musics', express.static(path.join('uploads','musics')));
-
+// app.options('*', cors());
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -37,6 +32,11 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
   next();
 });
+
+app.use('/uploads/videos', express.static(path.join('uploads','videos')));
+
+app.use('/uploads/musics', express.static(path.join('uploads','musics')));
+
 
 app.get("/", dummy);
 
