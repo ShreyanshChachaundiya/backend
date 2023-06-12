@@ -2,7 +2,9 @@ const multer = require("multer");
 const HttpError = require("../models/http-error");
 
 const musicUpload = multer({
-  limit: 500000,
+  limits: {
+    fileSize: 10 * 1024 * 1024, // 10MB (in bytes)
+  },
   storage: multer.diskStorage({
     // destination: (req, file, cb) => {
     //   cb(null, "./uploads/musics"); // Set the destination folder for storing uploaded videos
