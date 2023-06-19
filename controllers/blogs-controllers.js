@@ -7,7 +7,10 @@ const createBlog = async (req, res, next) => {
   const error = validationResult(req);
   if (!error.isEmpty()) {
     return next(
-      new HttpError("Invalid inputs passed, please check if date passed in correct format.", 422)
+      new HttpError(
+        "Invalid inputs passed, please check if date passed in correct format.",
+        422
+      )
     );
   }
 
@@ -84,6 +87,67 @@ const getBlogById = async (req, res, next) => {
   });
 };
 
+const updateBlog = async (req, res, next) => {
+  const bid = req.params.bid;
+  let blog;
+
+  try {
+    blog = await Blog.findById(bid);
+  } catch (err) {
+    const error = new HttpError("could not find a blogs", 404);
+    return next(error);
+  }
+
+  console.log(req.userData.userId + "  " + blog.user);
+
+  if (blog.user != req.userData.userId) {
+    const error = new HttpError("You are not allowed to update...", 404);
+    return next(error);
+  }
+
+  const { title, body } = req.body;
+
+  blog.title = title;
+  blog.body = body;
+
+  try {
+    await blog.save();
+  } catch (err) {
+    const error = new HttpError("creating blog failed", 500);
+    return next(error);
+  }
+  res.status(201).json({ blog: blog });
+};
+
+const deleteBlog = async (req, res, next) => {
+  const bid = req.params.bid;
+  let blog;
+ 
+  try {
+    blog = await Blog.findById(bid).populate("user");
+  } catch (err) {
+    const error = new HttpError("could not find a blog", 404);
+    return next(error);
+  }
+
+  if (blog.user._id != req.userData.userId) {
+    const error = new HttpError("You are not allowed to update...", 404);
+    return next(error);
+  }
+
+  try {
+    await blog.user.blogs.pull(blog);
+    await blog.deleteOne();
+    await blog.user.save();
+  } catch (err) {
+    const error = new HttpError("creating blog failed", 500);
+    return next(error);
+  }
+  res.status(201).json({ message: "blog deleted" });
+};
+
 exports.createBlog = createBlog;
 exports.AllBlogs = AllBlogs;
 exports.getBlogById = getBlogById;
+exports.updateBlog = updateBlog;
+exports.deleteBlog = deleteBlog;

@@ -18,6 +18,17 @@ router.post(
   blogsController.createBlog
 );
 
+router.patch(
+  "/edit/:bid",auth,
+  [
+    check("title").not().isEmpty(),
+    check("body").not().isEmpty(),
+  ],
+  blogsController.updateBlog
+);
+
 router.get("/get/blogs", auth, blogsController.AllBlogs);
 
 router.get("/get/blogs/:bid", auth, blogsController.getBlogById);
+
+router.delete("/delete/:bid", auth, blogsController.deleteBlog);
