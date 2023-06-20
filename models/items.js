@@ -6,6 +6,7 @@ const itemSchema = new schema({
   title: { type: String, required: true },
   cost: { type: Number, required: true },
   description: { type: String, required: true },
+  user: { type: mongoose.Types.ObjectId, ref: "User", required: true },
   category: {
     type: String,
     required: true,

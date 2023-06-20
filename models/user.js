@@ -14,6 +14,7 @@ const userSchema = new schema({
   posts: [{ type: mongoose.Types.ObjectId, ref: "Post" }],
   blogs: [{ type: mongoose.Types.ObjectId, ref: "Blog" }],
   videos: [{ type: mongoose.Types.ObjectId, ref: "Video" }],
+  items: [{ type: mongoose.Types.ObjectId, ref: "Item" }],
   role: {
     type: String,
     require: true,
