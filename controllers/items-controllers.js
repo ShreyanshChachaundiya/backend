@@ -1,6 +1,7 @@
 const HttpError = require("../models/http-error");
 const Item = require("../models/items");
 const { validationResult } = require("express-validator");
+const User = require("../models/user");
 
 const createItem = async (req, res, next) => {
   const error = validationResult(req);
@@ -82,66 +83,70 @@ const getItemById = async (req, res, next) => {
   });
 };
 
-// const updateItem = async (req, res, next) => {
-//   const id = req.params.id;
-//   let item;
+const updateItem = async (req, res, next) => {
+  const id = req.params.id;
+  let item;
 
-//   try {
-//     item = await Item.findById(bid);
-//   } catch (err) {
-//     const error = new HttpError("could not find a items", 404);
-//     return next(error);
-//   }
+  try {
+    item = await Item.findById(id);
+  } catch (err) {
+    const error = new HttpError("could not find a items", 404);
+    return next(error);
+  }
 
-//   // console.log(req.userData.userId + "  " + blog.user);
+  // console.log(req.userData.userId + "  " + blog.user);
 
-//   if (blog.user != req.userData.userId) {
-//     const error = new HttpError("You are not allowed to update...", 404);
-//     return next(error);
-//   }
+  if (item.user != req.userData.userId) {
+    const error = new HttpError("You are not allowed to update...", 404);
+    return next(error);
+  }
 
-//   const { title, body } = req.body;
+  const { title, cost, description, category } = req.body;
 
-//   blog.title = title;
-//   blog.body = body;
+  item.cost=cost;
+  item.title=title;
+  item.description=description;
+  item.category=category;
 
-//   try {
-//     await blog.save();
-//   } catch (err) {
-//     const error = new HttpError("creating blog failed", 500);
-//     return next(error);
-//   }
-//   res.status(201).json({ blog: blog });
-// };
+  try {
+    await item.save();
+  } catch (err) {
+    const error = new HttpError("updating item failed", 500);
+    return next(error);
+  }
+  res.status(201).json({ item: item });
+};
 
-// const deleteBlog = async (req, res, next) => {
-//   const bid = req.params.bid;
-//   let blog;
+const deleteItem = async (req, res, next) => {
+  const id = req.params.id;
+  let item;
  
-//   try {
-//     blog = await Blog.findById(bid).populate("user");
-//   } catch (err) {
-//     const error = new HttpError("could not find a blog", 404);
-//     return next(error);
-//   }
+  try {
+    item = await Item.findById(id).populate("user");
+  } catch (err) {
+    const error = new HttpError("could not find a item", 404);
+    return next(error);
+  }
 
-//   if (blog.user._id != req.userData.userId) {
-//     const error = new HttpError("You are not allowed to update...", 404);
-//     return next(error);
-//   }
+  if (item.user._id != req.userData.userId) {
+    const error = new HttpError("You are not allowed to update...", 404);
+    return next(error);
+  }
 
-//   try {
-//     await blog.user.blogs.pull(blog);
-//     await blog.deleteOne();
-//     await blog.user.save();
-//   } catch (err) {
-//     const error = new HttpError("creating blog failed", 500);
-//     return next(error);
-//   }
-//   res.status(201).json({ message: "blog deleted" });
-// };
+  try {
+    await item.user.items.pull(item);
+    await item.deleteOne();
+    await item.user.save();
+  } catch (err) {
+    const error = new HttpError("deleting item failed", 500);
+    return next(error);
+  }
+  res.status(201).json({ message: "item deleted" });
+};
 
 
 exports.createItem = createItem;
 exports.AllItems = AllItems;
 exports.getItemById = getItemById;
+exports.updateItem=updateItem;
+exports.deleteItem=deleteItem;

@@ -18,6 +18,7 @@ const videoSchema = new mongoose.Schema({
   likes: [{ type: mongoose.Types.ObjectId, ref: "User" }],
   comments: [{ type: mongoose.Types.ObjectId, ref: "User" }],
   share: [{ type: mongoose.Types.ObjectId, ref: "User" }],
+  user: { type: mongoose.Types.ObjectId, ref: "User", required: true },
 });
 
 module.exports = mongoose.model("Video", videoSchema);

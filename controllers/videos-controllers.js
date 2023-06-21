@@ -20,17 +20,17 @@ const createVideo = async (req, res, next) => {
   const { file } = req;
   const { user, name, caption } = req.body;
   let publicId;
-  
- await cloudinary.uploader.upload(
+
+  await cloudinary.uploader.upload(
     file.path,
-    {resource_type:"video", folder: "videos" },
+    { resource_type: "video", folder: "videos" },
     (error, result) => {
       if (error) {
         console.error("Error:", error);
         res.status(500).json({ error: "Failed to upload file to Cloudinary" });
       } else {
-     //   console.log("Upload Result:", result);
-         publicId = result.public_id;
+        //   console.log("Upload Result:", result);
+        publicId = result.public_id;
         // res.json({ publicId });
       }
     }
@@ -41,7 +41,6 @@ const createVideo = async (req, res, next) => {
     filename: publicId,
     caption,
   });
-
 
   let creator;
   try {
@@ -124,7 +123,39 @@ const like = async (req, res, next) => {
   res.status(201).json({ video: video });
 };
 
+const updateVideo = async (req, res, next) => {
+  const id = req.params.id;
+  let video;
+
+  try {
+    item = await Video.findById(id);
+  } catch (err) {
+    const error = new HttpError("could not find a video", 404);
+    return next(error);
+  }
+
+  // console.log(req.userData.userId + "  " + blog.user);
+
+  if (video.user != req.userData.userId) {
+    const error = new HttpError("You are not allowed to update...", 404);
+    return next(error);
+  }
+
+  const { caption } = req.body;
+
+  video.caption = caption;
+
+  try {
+    await video.save();
+  } catch (err) {
+    const error = new HttpError("updating video failed", 500);
+    return next(error);
+  }
+  res.status(201).json({ video: video });
+};
+
 exports.createVideo = createVideo;
 exports.AllVideos = AllVideos;
 // exports.getBlogById = getBlogById;
 exports.like = like;
+exports.updateVideo = updateVideo;
