@@ -37,6 +37,7 @@ const createVideo = async (req, res, next) => {
   );
 
   const createdVideo = new Video({
+    user,
     name,
     filename: publicId,
     caption,
