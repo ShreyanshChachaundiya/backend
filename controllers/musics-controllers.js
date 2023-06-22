@@ -111,7 +111,7 @@ const deleteMusic = async (req, res, next) => {
     return next(error);
   }
 
-  if (video.user._id != req.userData.userId) {
+  if (music.user._id != req.userData.userId) {
     const error = new HttpError("You are not allowed to update...", 404);
     return next(error);
   }
@@ -121,7 +121,7 @@ const deleteMusic = async (req, res, next) => {
     await music.deleteOne();
     await music.user.save();
   } catch (err) {
-    const error = new HttpError("deleting video failed", 500);
+    const error = new HttpError("deleting music failed", 500);
     return next(error);
   }
   res.status(201).json({ message: "music deleted" });
