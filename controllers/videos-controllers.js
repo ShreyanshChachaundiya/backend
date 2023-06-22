@@ -129,13 +129,13 @@ const updateVideo = async (req, res, next) => {
   let video;
 
   try {
-    item = await Video.findById(id);
+    video = await Video.findById(id);
   } catch (err) {
     const error = new HttpError("could not find a video", 404);
     return next(error);
   }
 
-  // console.log(req.userData.userId + "  " + blog.user);
+  // console.log(req.userData.userId + "  " + video.user);
 
   if (video.user != req.userData.userId) {
     const error = new HttpError("You are not allowed to update...", 404);
@@ -143,6 +143,7 @@ const updateVideo = async (req, res, next) => {
   }
 
   const { caption } = req.body;
+ 
 
   video.caption = caption;
 
@@ -155,8 +156,36 @@ const updateVideo = async (req, res, next) => {
   res.status(201).json({ video: video });
 };
 
+const deleteVideo = async (req, res, next) => {
+  const id = req.params.id;
+  let video;
+
+  try {
+    video = await Video.findById(id).populate("user");
+  } catch (err) {
+    const error = new HttpError("could not find a video", 404);
+    return next(error);
+  }
+
+  if (video.user._id != req.userData.userId) {
+    const error = new HttpError("You are not allowed to update...", 404);
+    return next(error);
+  }
+
+  try {
+    await video.user.videos.pull(video);
+    await video.deleteOne();
+    await video.user.save();
+  } catch (err) {
+    const error = new HttpError("deleting video failed", 500);
+    return next(error);
+  }
+  res.status(201).json({ message: "video deleted" });
+};
+
 exports.createVideo = createVideo;
 exports.AllVideos = AllVideos;
 // exports.getBlogById = getBlogById;
 exports.like = like;
 exports.updateVideo = updateVideo;
+exports.deleteVideo = deleteVideo;

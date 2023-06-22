@@ -25,3 +25,7 @@ router.post(
 router.get("/get/videos", auth, videosController.AllVideos);
 
 router.get("/:uid/:vid", auth, videosController.like);
+
+router.patch("/edit/:id", auth, [check("caption").not().isEmpty()], videosController.updateVideo);
+
+router.delete("/delete/:id", auth, videosController.deleteVideo);
