@@ -67,5 +67,66 @@ const AllMusics = async (req, res, next) => {
     .json({ musics: musics.map((music) => music.toObject({ getters: true })) });
 };
 
+const updateMusic = async (req, res, next) => {
+  const id = req.params.id;
+  let music;
+
+  try {
+    music = await Music.findById(id);
+  } catch (err) {
+    const error = new HttpError("could not find a music", 404);
+    return next(error);
+  }
+
+  // console.log(req.userData.userId + "  " + video.user);
+
+  if (music.user != req.userData.userId) {
+    const error = new HttpError("You are not allowed to update...", 404);
+    return next(error);
+  }
+
+  const { title, artist } = req.body;
+
+  music.title = title;
+  music.artist = artist;
+
+  try {
+    await music.save();
+  } catch (err) {
+    const error = new HttpError("updating music failed", 500);
+    return next(error);
+  }
+  res.status(201).json({ music: music });
+};
+
+const deleteMusic = async (req, res, next) => {
+  const id = req.params.id;
+  let music;
+
+  try {
+    music = await Music.findById(id).populate("user");
+  } catch (err) {
+    const error = new HttpError("could not find a video", 404);
+    return next(error);
+  }
+
+  if (video.user._id != req.userData.userId) {
+    const error = new HttpError("You are not allowed to update...", 404);
+    return next(error);
+  }
+
+  try {
+    await music.user.musics.pull(music);
+    await music.deleteOne();
+    await music.user.save();
+  } catch (err) {
+    const error = new HttpError("deleting video failed", 500);
+    return next(error);
+  }
+  res.status(201).json({ message: "music deleted" });
+};
+
 exports.createMusic = createMusic;
 exports.AllMusics = AllMusics;
+exports.updateMusic = updateMusic;
+exports.deleteMusic = deleteMusic;

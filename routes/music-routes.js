@@ -17,3 +17,7 @@ router.post(
 
 router.get("/get/musics", auth, musicsController.AllMusics);
 
+router.patch("/edit/:id", auth, musicsController.updateMusic);
+
+router.delete("/delete/:id", auth, musicsController.deleteMusic);
+
