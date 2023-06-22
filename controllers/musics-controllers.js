@@ -18,7 +18,7 @@ const createMusic = async (req, res, next) => {
   }
 
   const { file } = req;
-  const { title, artist } = req.body;
+  const { title, artist,user } = req.body;
 
   await cloudinary.uploader.upload(
     file.path,
@@ -39,6 +39,7 @@ const createMusic = async (req, res, next) => {
     title,
     filename: publicId,
     artist,
+    user
   });
 
   try {
