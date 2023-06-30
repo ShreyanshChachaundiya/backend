@@ -30,7 +30,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const io = socketIO(server, {
   cors: {
-    origin: '*',
+    origin: 'localhost:3000',
   }
 });
 
