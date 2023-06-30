@@ -43,7 +43,7 @@ const io = socketIO(server, {
   },
 });
 
-// app.options('*', cors());
+app.options('*', cors());
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
