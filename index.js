@@ -17,7 +17,6 @@ const convsRoutes = require("./routes/conv-routes");
 const msgsRoutes = require("./routes/msg-routes");
 const { dummy } = require("./controllers/users-controllers");
 const cors = require("cors");
-const { log } = require("console");
 
 const app = express();
 app.use(cors());
@@ -81,9 +80,9 @@ io.on("connection", (socket) => {
     //console.log("active",users);
     const user = getUser(reciever);
 
-    console.log(message, user?.userId);
+    console.log(message, user.userId);
 
-    io.to(user?.socketId).emit("getMessage", { message, sender });
+    io.to(user.socketId).emit("getMessage", { message, sender });
     // Handle event2
   });
 
