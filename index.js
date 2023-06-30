@@ -20,17 +20,18 @@ const cors = require("cors");
 const { log } = require("console");
 
 const app = express();
+app.use(cors());
 // Parse JSON and URL-encoded request bodies
 
 const server = http.createServer(app);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors());
+
 
 const io = socketIO(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "*",
     methods: ["GET", "POST", "PATCH", "DELETE"],
     allowedHeaders: [
       "Origin",
