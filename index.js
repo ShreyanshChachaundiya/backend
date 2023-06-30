@@ -74,6 +74,10 @@ io.on("connection", (socket) => {
     // Handle event2
   });
 
+  const socket = io({
+    reconnectionAttempts: 5 // defaults to Infinity
+  });
+
   // Disconnect event
   socket.on("disconnect", () => {
     // console.log(users);
