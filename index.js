@@ -28,8 +28,13 @@ const server = http.createServer(app);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
-const io = socketIO(server);
+const io = socketIO(server, {
+  cors: {
+    origin: "https://example.com",
+    allowedHeaders: ["my-custom-header"],
+    credentials: true,
+  },
+});
 
 //app.options('*', cors());
 
@@ -72,10 +77,6 @@ io.on("connection", (socket) => {
 
     io.to(user?.socketId).emit("getMessage", { message, sender });
     // Handle event2
-  });
-
-  const socket = io({
-    reconnectionAttempts: 5 // defaults to Infinity
   });
 
   // Disconnect event
