@@ -29,22 +29,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-const io = socketIO(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST", "PATCH", "DELETE"],
-    allowedHeaders: [
-      "Origin",
-      "X-Requested-With",
-      "Content-Type",
-      "Accept",
-      "Authorization",
-    ],
-    credentials: true,
-  },
-});
+const io = socketIO(server);
 
-app.options('*', cors());
+//app.options('*', cors());
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
