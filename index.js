@@ -93,6 +93,10 @@ io.on("connection", (socket) => {
     io.emit("getUser", users);
     console.log("Client disconnected");
   });
+
+  socket.on("connect_error", (err) => {
+    console.log(`connect_error due to ${err.message}`);
+  });
 });
 
 app.use("/uploads/videos", express.static(path.join("uploads", "videos")));
