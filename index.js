@@ -32,10 +32,12 @@ const io = socketIO(server, {
   cors: {
     origin: "*",
     methods: ["GET", "POST", "PATCH", "DELETE"],
-    allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization"],
+    allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization", "Access-Control-Allow-Origin"],
     credentials: true
   }
 });
+
+
 //app.options('*', cors());
 
 app.use((req, res, next) => {
