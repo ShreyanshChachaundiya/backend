@@ -30,7 +30,7 @@ app.use(cors());
 
 const io = socketIO(server, {
   cors: {
-    origin: "*",
+    origin: "https://backend-project-git-master-shreyanshchachaundiya.vercel.app",
     methods: ["GET", "POST", "PATCH", "DELETE"],
     allowedHeaders: [
       "Origin",
