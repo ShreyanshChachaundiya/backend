@@ -32,11 +32,17 @@ const io = socketIO(server, {
   cors: {
     origin: "*",
     methods: ["GET", "POST", "PATCH", "DELETE"],
-    allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization", "Access-Control-Allow-Origin"],
-    credentials: true
-  }
+    allowedHeaders: [
+      "Origin",
+      "X-Requested-With",
+      "Content-Type",
+      "Accept",
+      "Authorization",
+      "Access-Control-Allow-Origin",
+    ],
+    credentials: true,
+  },
 });
-
 
 //app.options('*', cors());
 
@@ -50,7 +56,7 @@ app.use((req, res, next) => {
   next();
 });
 
-let users = [];
+let users = ["6482ba9f0cbeedd7b17927e6","64914fd9777f8521889bcbbb"];
 
 const getUser = (userId) => {
   // console.log("active",users);
