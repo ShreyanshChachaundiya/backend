@@ -30,7 +30,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const io = socketIO(server, {
   cors: {
-    origin: "https://example.com",
+    origin: "http://localhost:3000",
     allowedHeaders: ["my-custom-header"],
     credentials: true,
   },
