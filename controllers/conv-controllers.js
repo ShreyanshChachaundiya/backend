@@ -53,10 +53,38 @@ const getConversation = async (req, res, next) => {
     const error = new HttpError("finding conv failed", 500);
     return next(error);
   }
-  res
-  .status(201)
-  .json({ conversation: conversation.map((item) => item.toObject({ getters: true })) });
+  res.status(201).json({
+    conversation: conversation.map((item) => item.toObject({ getters: true })),
+  });
+};
+
+const checkConversation = async (req, res, next) => {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return next(
+      new HttpError(
+        "Invalid inputs passed, please check if date passed in correct format.",
+        422
+      )
+    );
+  }
+
+  const p1 = req.params.p1;
+  const p2 = req.params.p2;
+
+  let conversation;
+
+  try {
+    conversation = await Conversation.find({
+      members: { $all: [p1, p2] },
+    });
+  } catch (err) {
+    const error = new HttpError("finding conv failed", 500);
+    return next(error);
+  }
+  res.status(201).json({ conversation: conversation });
 };
 
 exports.createConversation = createConversation;
 exports.getConversation = getConversation;
+exports.checkConversation = checkConversation;

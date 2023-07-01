@@ -10,3 +10,5 @@ module.exports = router;
 router.post("/add", convsController.createConversation);
 
 router.get("/:id", convsController.getConversation);
+
+router.get("/check/:p1/:p2", convsController.checkConversation);

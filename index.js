@@ -30,7 +30,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const io = socketIO(server, {
   cors: {
     origin: "*",
-    methods: ["GET", "POST", "PATCH", "DELETE"],
     allowedHeaders: [
       "Origin",
       "X-Requested-With",
@@ -55,7 +54,7 @@ app.use((req, res, next) => {
   next();
 });
 
-let users = ["6482ba9f0cbeedd7b17927e6","64914fd9777f8521889bcbbb"];
+let users = [];
 
 const getUser = (userId) => {
   // console.log("active",users);
@@ -80,9 +79,9 @@ io.on("connection", (socket) => {
     //console.log("active",users);
     const user = getUser(reciever);
 
-    console.log(message, user.userId);
+    console.log(message, user?.userId);
 
-    io.to(user.socketId).emit("getMessage", { message, sender });
+    io.to(user?.socketId).emit("getMessage", { message, sender });
     // Handle event2
   });
 

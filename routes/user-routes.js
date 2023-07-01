@@ -7,6 +7,8 @@ const router = express.Router();
 
 // router.use(authMiddleware);
 
+router.get("/all", usersController.allUsers);
+
 router.post(
   "/signup",
   [
@@ -30,5 +32,6 @@ router.post("/loginByName", usersController.loginByName);
 router.post("/forgot-password", usersController.forgot_password);
 router.get("/reset-password/:id/:token", usersController.reset_password);
 router.get("/:uid", authMiddleware.auth, usersController.getUserById);
+
 
 module.exports = router;

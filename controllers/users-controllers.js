@@ -315,6 +315,25 @@ const getUserById = async (req, res, next) => {
   });
 };
 
+const allUsers = async (req, res, next) => {
+  let users;
+  try {
+    users = await User.find();
+  } catch (err) {
+    const error = new HttpError("User Not Found.", 500);
+    return next(error);
+  }
+
+  if (!users) {
+    const error = new HttpError("Invalid credentials, could not Found.", 401);
+    return next(error);
+  }
+
+  res
+  .status(201)
+  .json({ users: users.map((item) => item.toObject({ getters: true })) });
+};
+
 exports.signup = signup;
 exports.login = login;
 exports.loginByName = loginByName;
@@ -323,3 +342,4 @@ exports.forgot_password = forgot_password;
 exports.reset_password = reset_password;
 exports.update_password = update_password;
 exports.getUserById = getUserById;
+exports.allUsers=allUsers;
